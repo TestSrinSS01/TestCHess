@@ -3,7 +3,8 @@
 #include <stb_image.h>
 
 Texture::Texture(int const& slot, std::string const& path): m_texture(0), slot(slot) {
-    glGenTextures(1, &m_texture);
+    glCreateTextures(GL_TEXTURE_2D, 1, &m_texture);
+    //glBindTextureUnit(slot, m_texture);
     glBindTexture(GL_TEXTURE_2D, m_texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -31,7 +32,12 @@ Texture::Texture(int const& slot, std::string const& path): m_texture(0), slot(s
     stbi_image_free(buffer);
 }
 
+Texture::~Texture() {
+    glDeleteTextures(1, &m_texture);
+}
+
 void Texture::bind() const {
+    std::cout << "binding " << m_texture << " to slot " << slot << std::endl;
     glBindTextureUnit(slot, m_texture);
 }
 

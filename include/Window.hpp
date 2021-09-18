@@ -7,7 +7,6 @@
 #include <Texture.h>
 #include <functional>
 #include <Box.hpp>
-#include <GL/glew.h>
 
 using namespace std;
 
@@ -23,6 +22,8 @@ private:
     static vector<Box*> boxes;
     VertexArray vao;
     VertexBuffer vbo;
+    Shader shader;
+    int tex[31];
 public:
     static map<std::string, Texture*> textures;
     static map<char, std::string> piece_map;
@@ -33,7 +34,7 @@ public:
     void render(function<void()> const& = [](){});
     static void add_box(Box* const& box);
     bool should_close();
-    template<typename... T> static void load_texture(int const& slot, std::string path = "", T &... names) {
+    template<typename... T> static void load_texture(int const& slot, std::string path, T &... names) {
         vector<string> arr { names... };
         for (const auto &name : arr) {
             Window::textures.insert({ name, new Texture(slot,  path + "textures\\" + name + ".png") });

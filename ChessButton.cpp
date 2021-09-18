@@ -9,7 +9,7 @@ ChessButton::ChessButton(
      float const* const& colour,
      std::function<void(Button* const&)>const& callback, char piece
 ):
-Button(x, y, width, height, colour, callback, "", 3),
+Button(x, y, width, height, colour, callback, ""),
 colour_cpy(colour),
 piece(piece),
 is_target(false) {}
@@ -47,28 +47,37 @@ void ChessButton::bind() {
 }
 
 std::vector<float> ChessButton::get_vertices() {
-    float slot = piece ? Window::textures.at(Window::piece_map.at(piece))->get_slot() : 0;
-    float target_slot = is_target ? Window::textures.at("target")->get_slot() : 0;
-    return std::vector<float> {
+    auto quad = std::vector<float>{
         (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   0,
         (float)(x + width), (float)y,               colour[0], colour[1], colour[2], 1.0f,       1.0f, 0.0f,   0,
         (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   0,
         (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   0,
         (float)x, (float)(y + height),              colour[0], colour[1], colour[2], 1.0f,       0.0f, 1.0f,   0,
         (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   0,
-                                                                                     
-        (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   target_slot,
-        (float)(x + width), (float)y,               colour[0], colour[1], colour[2], 1.0f,       1.0f, 0.0f,   target_slot,
-        (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   target_slot,
-        (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   target_slot,
-        (float)x, (float)(y + height),              colour[0], colour[1], colour[2], 1.0f,       0.0f, 1.0f,   target_slot,
-        (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   target_slot,
-                                                                                     
-        (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   slot,
-        (float)(x + width), (float)y,               colour[0], colour[1], colour[2], 1.0f,       1.0f, 0.0f,   slot,
-        (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   slot,
-        (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   slot,
-        (float)x, (float)(y + height),              colour[0], colour[1], colour[2], 1.0f,       0.0f, 1.0f,   slot,
-        (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   slot,
     };
+    if (is_target) {
+        float slot = Window::textures.at("target")->get_slot();
+        auto target = std::vector<float>{
+            (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   slot,
+            (float)(x + width), (float)y,               colour[0], colour[1], colour[2], 1.0f,       1.0f, 0.0f,   slot,
+            (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   slot,
+            (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   slot,
+            (float)x, (float)(y + height),              colour[0], colour[1], colour[2], 1.0f,       0.0f, 1.0f,   slot,
+            (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   slot,
+        };
+        quad.insert(quad.end(), target.begin(), target.end());
+    }
+    if (piece != 0) {
+        float slot = Window::textures.at(Window::piece_map.at(piece))->get_slot();
+        auto piece = std::vector<float>{
+            (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   slot,
+            (float)(x + width), (float)y,               colour[0], colour[1], colour[2], 1.0f,       1.0f, 0.0f,   slot,
+            (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   slot,
+            (float)(x + width), (float)(y + height),    colour[0], colour[1], colour[2], 1.0f,       1.0f, 1.0f,   slot,
+            (float)x, (float)(y + height),              colour[0], colour[1], colour[2], 1.0f,       0.0f, 1.0f,   slot,
+            (float)x, (float)y,                         colour[0], colour[1], colour[2], 1.0f,       0.0f, 0.0f,   slot,
+        };
+        quad.insert(quad.end(), piece.begin(), piece.end());
+    }
+    return quad;
 }
