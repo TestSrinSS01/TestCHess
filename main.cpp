@@ -23,14 +23,14 @@ int main(int n, char** args) {
         Window::load_texture(4, ss.str(), "q");
         Window::load_texture(5, ss.str(), "k");
         Window::load_texture(6, ss.str(), "R_");
-        Window::load_texture(7, ss.str(), "N_");
+        /*Window::load_texture(7, ss.str(), "N_");
         Window::load_texture(8, ss.str(), "B_");
         Window::load_texture(9, ss.str(), "Q_");
         Window::load_texture(10, ss.str(), "K_");
         Window::load_texture(11, ss.str(), "P_"); 
         Window::load_texture(12, ss.str(), "p"); 
         Window::load_texture(13, ss.str(), "dot"); 
-        Window::load_texture(14, ss.str(), "target"); 
+        Window::load_texture(14, ss.str(), "target"); */
         std::cout << "done loading textures." << std::endl;
         Box* box1 = new Box(0, 0, true);
         float black[] = { 0, 0, 0 };
@@ -40,7 +40,7 @@ int main(int n, char** args) {
             for (int file = 0; file < 8; file++) {
                 box1->add_button(new ChessButton(file * 50, rank * 50, 50, 50, (rank + file) % 2 == 0 ? black : white, [&, rank, file](Button* const& it) {
                     std::cout << chess.board[rank * 8 + file] << std::endl;
-                }, chess.board[rank * 8 + file]));
+                }, 'k')); // chess.board[rank * 8 + file]
             }
         }
         /*Box* box2 = new Box(405, 10, true);

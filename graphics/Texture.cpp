@@ -36,7 +36,7 @@ void Texture::bind() const {
 }
 
 void Texture::un_bind() const {
-    glBindTextureUnit(slot, m_texture);
+    glBindTextureUnit(slot, 0);
 }
 
 int Texture::get_slot() const {
